@@ -2,26 +2,45 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '@/stores/AuthStore';
+import axios from 'axios';
 
 export default function WaitingApproval() {
-  const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
+  const { token, updateUser } = useAuthStore(); // Get updateUser from store instead of setUser
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/');
-      return;
-    }
+    // Check verification status from API
+    const checkVerificationStatus = async () => {
+      try {
+        const response = await axios.get('https://backend-ui4w.onrender.com/api/v1/onboarding/verification-status', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-    if (user?.userType !== 'teacher') {
-      router.push('/');
-      return;
-    }
+        if (response.data.data.verificationStatus === "approved") {
+          console.log("User is approved, redirecting to dashboard");
+          
+          // Update user in store with new verification status
+          updateUser({
+            verificationStatus: 'approved',
+            isVerified: true
+          });
+          
+          router.push('/Teacher');
+        }
+      } catch (error) {
+        console.error('Error checking verification status:', error);
+      }
+    };
 
-    if (user?.isVerified && user?.verificationStatus === 'approved') {
-      router.push('/dashboard/teacher');
-    }
-  }, [isAuthenticated, user, router]);
+    // Check status when component mounts and set interval
+    checkVerificationStatus();
+    const interval = setInterval(checkVerificationStatus, 30000); // Check every 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [token, router, updateUser]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-white flex items-center justify-center p-4">
