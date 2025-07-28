@@ -6,6 +6,7 @@ import { Button } from "../../_component/ui/Button";
 import { Badge } from "../../_component/ui/Badge";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import useOnboardingStore from "@/stores/onboardingStore";
 
 // --- تم تحديث قائمة التخصصات لتتوافق مع الصورة والـ API ---
 const SPECIALIZATIONS = [
@@ -50,6 +51,29 @@ export default function TeacherOnboardingPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+
+  // Onboarding store
+  const {
+    fetchVerificationStatus,
+    profileCompletion,
+    verificationStatus,
+    rejectionReason,
+    loading: onboardingLoading,
+    error: onboardingError,
+  } = useOnboardingStore();
+
+  // Auth token
+  const authStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("auth-storage")) : null;
+  const token = authStorage?.state?.token;
+
+  // Fetch onboarding status on mount
+  React.useEffect(() => {
+    if (token) fetchVerificationStatus(token);
+  }, [token, fetchVerificationStatus]);
+
+  // Show warning if rejected or missing fields
+  const showProfileWarning = verificationStatus === "rejected" || (profileCompletion && !profileCompletion.isComplete);
+  const missingFields = profileCompletion?.missingFields || [];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -234,6 +258,19 @@ export default function TeacherOnboardingPage() {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6" dir="rtl">
+          {showProfileWarning && (
+            <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-xl p-4 text-center mb-4">
+              {verificationStatus === "rejected" && rejectionReason && (
+                <div className="mb-2 font-bold">سبب الرفض: {rejectionReason}</div>
+              )}
+              {missingFields.length > 0 && (
+                <div>
+                  <span>الحقول الناقصة: </span>
+                  <span className="font-bold">{missingFields.join(", ")}</span>
+                </div>
+              )}
+            </div>
+          )}
            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-100">
              <label className="block mb-2 font-semibold text-gray-700 flex items-center gap-2">
                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>

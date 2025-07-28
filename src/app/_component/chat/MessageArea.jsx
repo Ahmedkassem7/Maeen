@@ -369,31 +369,10 @@ const MessageArea = ({
         </div>
 
         <div className="text-center max-w-lg mx-auto p-8 relative z-10">
-          <div className="w-32 h-32 bg-gradient-to-br from-[#0b1b49] to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-            <MessageCircle className="h-16 w-16 text-white" />
-          </div>
           <h3 className="text-3xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-[#0b1b49] to-blue-600 bg-clip-text text-transparent">
             مرحباً بك في نظام المحادثات
           </h3>
-          <p className="text-gray-600 mb-8 leading-relaxed text-lg">
-            اختر محادثة من القائمة على اليمين لبدء الدردشة والتواصل المباشر
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mb-3 mx-auto">
-                <MessageCircle className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-gray-800 mb-2">محادثات فورية</h4>
-              <p className="text-sm text-gray-600">تواصل مباشر وسريع</p>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-3 mx-auto">
-                <UserCheck className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="font-bold text-gray-800 mb-2">حالة الاتصال</h4>
-              <p className="text-sm text-gray-600">معرفة من متصل الآن</p>
-            </div>
-          </div>
+
           <div className="bg-gradient-to-r from-[#0b1b49]/5 to-blue-500/5 p-4 rounded-2xl border border-gray-100">
             <p className="text-sm text-gray-600 font-medium">
               💬 ابدأ محادثة جديدة واستمتع بتجربة تواصل سلسة ومتطورة

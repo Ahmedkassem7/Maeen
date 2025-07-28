@@ -71,6 +71,7 @@ const useAuthStore = create(
       error: null,
       isVerified: false,
       lastActivity: null,
+      verificationStatus: null,
 
       // Performance optimized login
       login: async (values) => {
@@ -86,6 +87,7 @@ const useAuthStore = create(
           const user = data.data.user;
           const token = data.data.tokens?.accessToken;
           const isVerified = data.data.user?.isVerified;
+          const verificationStatus = data.data.user?.verificationStatus;
 
           // Update last activity
           const now = new Date().toISOString();
@@ -96,6 +98,7 @@ const useAuthStore = create(
             token: token,
             isLoading: false,
             isVerified: isVerified,
+            verificationStatus: verificationStatus,
             lastActivity: now,
             error: null,
           });

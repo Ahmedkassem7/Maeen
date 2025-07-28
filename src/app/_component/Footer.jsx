@@ -251,6 +251,12 @@ export default function Footer() {
               >
                 ملفات الارتباط
               </Link>
+              <Link
+                href="/user-manual"
+                className="text-slate-400 hover:text-white text-sm transition-all duration-300 hover:underline underline-offset-4"
+              >
+                دليل المستخدم{" "}
+              </Link>
             </div>
           </div>
 

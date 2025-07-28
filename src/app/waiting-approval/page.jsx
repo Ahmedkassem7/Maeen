@@ -1,39 +1,36 @@
 "use client";
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-// import useAuthStore from '../../../stores/AuthStore';
 import useAuthStore from '@/stores/AuthStore';
 
 export default function WaitingApproval() {
   const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
 
-  // التحقق من حالة المستخدم
   useEffect(() => {
-    // إذا لم يكن مسجل الدخول، توجيه للصفحة الرئيسية
     if (!isAuthenticated) {
       router.push('/');
       return;
     }
 
-    // إذا كان طالب، توجيه للصفحة الرئيسية
     if (user?.userType !== 'teacher') {
       router.push('/');
       return;
     }
 
-    // إذا كان معلم مفعل، توجيه للوحة التحكم
     if (user?.isVerified && user?.verificationStatus === 'approved') {
       router.push('/dashboard/teacher');
     }
   }, [isAuthenticated, user, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-islamic-primary/10 to-islamic-secondary/10 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-xl p-8 text-center space-y-6">
-        <div className="w-20 h-20 mx-auto bg-islamic-primary/10 rounded-full flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-white flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-md p-8 text-center space-y-6 animate-fadeIn border border-gray-100">
+        
+        {/* Icon */}
+        <div className="w-16 h-16 mx-auto bg-sky-100 rounded-full flex items-center justify-center">
           <svg
-            className="w-10 h-10 text-islamic-primary"
+            className="w-8 h-8 text-sky-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -46,32 +43,34 @@ export default function WaitingApproval() {
             />
           </svg>
         </div>
-        
-        <h1 className="text-2xl font-bold text-gray-800">في انتظار الموافقة</h1>
-        
-        <p className="text-gray-600">
-          حسابك قيد المراجعة من قبل إدارة المنصة. 
-          سيتم إخطارك عبر البريد الإلكتروني فور الموافقة على حسابك.
+
+        {/* Title */}
+        <h1 className="text-2xl font-semibold text-gray-800">حسابك قيد المراجعة</h1>
+
+        {/* Message */}
+        <p className="text-gray-600 text-sm leading-relaxed">
+          شكرًا لانضمامك إلينا! حسابك تحت المراجعة من قبل فريقنا. سيتم التواصل معك عبر البريد الإلكتروني بعد الانتهاء من التحقق.
         </p>
-        
+
+        {/* Animated loader */}
         <div className="animate-pulse flex justify-center">
-          <div className="h-2 w-24 bg-islamic-primary/30 rounded"></div>
+          <div className="h-2 w-24 bg-sky-300/40 rounded-full"></div>
         </div>
-        
-        <div className="space-y-4">
-          <p className="text-sm text-gray-500">
-            يمكنك الاطلاع على:
-          </p>
-          <ul className="text-sm text-gray-600 space-y-2">
-            <li>• التأكد من اكتمال ملفك الشخصي</li>
-            <li>• مراجعة الوثائق المطلوبة</li>
-            <li>• الاطلاع على شروط وأحكام المنصة</li>
+
+        {/* Checklist */}
+        <div className="bg-gray-50 p-4 rounded-xl text-right space-y-2 border border-gray-100">
+          <p className="text-sm font-medium text-gray-500">نصائح للتسريع:</p>
+          <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+            <li>تأكد من اكتمال ملفك الشخصي</li>
+            <li>مراجعة المستندات المرفقة</li>
+            <li>الاطلاع على الشروط والسياسات</li>
           </ul>
         </div>
-        
+
+        {/* Button */}
         <button
           onClick={() => router.push('/')}
-          className="w-full py-2 px-4 bg-islamic-primary text-white rounded-lg hover:bg-islamic-primary/90 transition duration-200"
+          className="w-full cursor-pointer py-2 px-4 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition duration-200 text-sm"
         >
           العودة للصفحة الرئيسية
         </button>

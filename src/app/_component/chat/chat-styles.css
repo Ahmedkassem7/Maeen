@@ -30,7 +30,7 @@
 }
 
 /* Optimized Scrollbar */
-.custom-scrollbar {
+/* .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #1e3a8a rgba(243, 244, 246, 0.5);
 }
@@ -58,6 +58,23 @@
 
 .custom-scrollbar::-webkit-scrollbar-corner {
     background: rgba(243, 244, 246, 0.3);
+} */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--islamic-blue));
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(3, 27, 73, 0.8);
 }
 
 /* Performance optimized animations */
