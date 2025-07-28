@@ -263,12 +263,12 @@ export default function TeacherOnboardingPage() {
               {verificationStatus === "rejected" && rejectionReason && (
                 <div className="mb-2 font-bold">سبب الرفض: {rejectionReason}</div>
               )}
-              {missingFields.length > 0 && (
+              {/* {missingFields.length > 0 && (
                 <div>
                   <span>الحقول الناقصة: </span>
                   <span className="font-bold">{missingFields.join(", ")}</span>
                 </div>
-              )}
+              )} */}
             </div>
           )}
            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-100">
