@@ -9,7 +9,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import useAuthStore from "@/stores/AuthStore";
-import useOnboardingStore from "@/stores/onboardingStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Toast from "../../_component/shared/toast/Toast";
@@ -32,13 +31,6 @@ const initialValues = { email: "", password: "" };
 export default function LoginPage() {
   const { login, isLoading, error, isAuthenticated, user, isVerified } =
     useAuthStore();
-  const {
-    fetchVerificationStatus,
-    verificationStatus,
-    rejectionReason,
-    loading: onboardingLoading,
-    clearError: clearOnboardingError,
-  } = useOnboardingStore();
   const [toastState, setToastState] = useState({
     show: false,
     message: "",
@@ -47,49 +39,26 @@ export default function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-  const [showRejection, setShowRejection] = useState(false);
   const router = useRouter();
 
-  // New: Effect to fetch onboarding status after login for teachers
-  useEffect(() => {
-    if (isAuthenticated && user && user.userType === "teacher") {
-      // Only fetch if not already fetched
-      fetchVerificationStatus(user.token || localStorage.getItem("auth-storage") && JSON.parse(localStorage.getItem("auth-storage")).state.token);
-    }
-  }, [isAuthenticated, user, fetchVerificationStatus]);
-
-  // Updated navigation logic
-  useEffect(() => {
+  // Memoized navigation logic
+  const handleNavigation = useCallback(() => {
     if (isAuthenticated && user) {
-      console.log("user is", user);
-      if (user.userType === "teacher") {
-        // Use the verification status directly from the user object
-        const status = user.verificationStatus;
+      setShowLoading(true);
 
-        if (status === "approved") {
-          setShowLoading(true);
-          router.push("/Teacher");
-        } else if (status === "not_submitted") {
-          setShowLoading(true);
+      if (user.userType === "teacher") {
+        if (!isVerified) {
           router.push("/Onboarding-profile");
-        } else if (status === "pending") {
-          setShowLoading(true);
-          router.push("/waiting-approval");
-        } else if (status === "rejected") {
-          alert(`تم رفض طلبك: ${user.rejectionReason || rejectionReason || "برجاء مراجعة بياناتك"}`);
-          setShowLoading(true);
-          router.push("/Onboarding-document");
+        } else {
+          router.push("/Teacher");
         }
       } else if (user.userType === "student") {
-        setShowLoading(true);
-        router.push("/Student");
+        router.push("/");
       } else {
-        setShowLoading(true);
         router.push("/");
       }
     }
-  }, [isAuthenticated, user, router, fetchVerificationStatus]);
-
+  }, [isAuthenticated, user, isVerified, router]);
 
   // Memoized submit handler
   const handleSubmit = useCallback(
@@ -115,6 +84,11 @@ export default function LoginPage() {
   const handleToastClose = useCallback(() => {
     setToastState((prev) => ({ ...prev, show: false }));
   }, []);
+
+  // Effect for navigation
+  useEffect(() => {
+    handleNavigation();
+  }, [handleNavigation]);
 
   // Effect for error toast
   useEffect(() => {

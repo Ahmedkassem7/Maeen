@@ -4,7 +4,6 @@ import { Button } from "../../_component/ui/Button";
 import { Badge } from "../../_component/ui/Badge";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import useOnboardingStore from "@/stores/onboardingStore";
 
 const DOCS = [
   {
@@ -40,41 +39,16 @@ export default function UploadDocumentsStep() {
   const [files, setFiles] = useState(initialState);
   const [previews, setPreviews] = useState({});
   const [uploading, setUploading] = useState({});
+  const [uploaded, setUploaded] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef({});
   const router = useRouter();
 
-  // Auth token
+  // Simulate token (replace with real AuthStore)
   const authStorage = JSON.parse(localStorage.getItem("auth-storage"));
   const token = authStorage?.state?.token;
-
-  // Onboarding store
-  const {
-    documents,
-    fetchVerificationStatus,
-    deleteDocument,
-    submitForReview,
-    loading: onboardingLoading,
-    error: onboardingError,
-    rejectionReason,
-    verificationStatus,
-  } = useOnboardingStore();
-
-  // Fetch documents on mount
-  React.useEffect(() => {
-    if (token) fetchVerificationStatus(token);
-  }, [token, fetchVerificationStatus]);
-
-  // Map server docs to uploaded state
-  const uploaded = React.useMemo(() => {
-    const map = {};
-    documents?.forEach((doc) => {
-      map[doc.docType] = doc;
-    });
-    return map;
-  }, [documents]);
 
   // Handle file select
   const handleFileChange = (key, file) => {
@@ -113,9 +87,9 @@ export default function UploadDocumentsStep() {
       });
       const data = await res.json();
       if (data.status === "success") {
+        setUploaded((prev) => ({ ...prev, [key]: data.data }));
         setSuccess("تم رفع الملف بنجاح!");
-        // Refresh the documents list to show the new file
-        fetchVerificationStatus(token);
+        // router.push("/Onboarding-end");
       } else {
         setError(data.message || "فشل رفع الملف");
       }
@@ -134,19 +108,30 @@ export default function UploadDocumentsStep() {
     try {
       const doc = uploaded[key];
       if (!doc) return;
-      await deleteDocument(token, doc._id);
-      setSuccess("تم حذف الملف بنجاح");
-      // Refresh the documents list to reflect the deletion
-      fetchVerificationStatus(token);
+      const res = await fetch(`/api/onboarding/documents/${doc._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        setUploaded((prev) => ({ ...prev, [key]: null }));
+        setFiles((prev) => ({ ...prev, [key]: null }));
+        setPreviews((prev) => ({ ...prev, [key]: null }));
+        setSuccess("تم حذف الملف بنجاح");
+      } else {
+        setError(data.message || "فشل حذف الملف");
+      }
     } catch (e) {
-      setError("فشل حذف الملف");
+      setError("فشل الاتصال بالخادم. حاول مرة أخرى.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Submit all (submit for review)
-  const handleSubmit = async (e) => {
+  // Submit all
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -154,16 +139,9 @@ export default function UploadDocumentsStep() {
       setError("يرجى رفع جميع الملفات المطلوبة أولاً");
       return;
     }
-    setLoading(true);
-    try {
-      await submitForReview(token);
-      setSuccess("تم إرسال الطلب للمراجعة! سيتم إشعارك بعد المراجعة.");
-      setTimeout(() => router.push("/waiting-approval"), 2000);
-    } catch (e) {
-      setError("فشل إرسال الطلب للمراجعة");
-    } finally {
-      setLoading(false);
-    }
+    setSuccess("تم رفع جميع الملفات بنجاح! سيتم مراجعتها من الإدارة.");
+    // TODO: Redirect or show next step
+    router.push("/Onboarding-end");
   };
 
   return (
@@ -215,14 +193,6 @@ export default function UploadDocumentsStep() {
           <h1 className="text-2xl font-bold text-gray-800 mb-2">رفع الوثائق المطلوبة</h1>
           <p className="text-gray-600 text-sm">يرجى رفع الملفات التالية بدقة ووضوح. جميع الملفات ستظل سرية وتستخدم فقط للتحقق من هويتك.</p>
         </div>
-
-        {/* Rejection Reason Alert */}
-        {verificationStatus === 'rejected' && rejectionReason && (
-          <div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 rounded-lg mb-6 shadow-md" role="alert">
-            <p className="font-bold">تم رفض طلبك</p>
-            <p>{rejectionReason}</p>
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 gap-6">
             {DOCS.map((doc) => (
