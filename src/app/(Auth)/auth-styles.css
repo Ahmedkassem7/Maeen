@@ -1,0 +1,285 @@
+/* Authentication Pages Enhanced Styles - Performance Optimized */
+
+/* CSS Variables for better performance */
+:root {
+    --auth-primary: #0b1b49;
+    --auth-secondary: #1e3fb8;
+    --auth-gradient: linear-gradient(135deg, var(--auth-primary) 0%, var(--auth-secondary) 100%);
+    --auth-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --auth-shadow: 0 8px 25px rgba(11, 27, 73, 0.15);
+    --auth-blur: blur(10px);
+}
+
+/* Glassmorphism effect - optimized */
+.auth-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: var(--auth-blur);
+    -webkit-backdrop-filter: var(--auth-blur);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    will-change: transform;
+}
+
+/* Floating animation - optimized with transform3d for GPU acceleration */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(0, -20px, 0);
+    }
+}
+
+.floating {
+    animation: float 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Gradient text effect - optimized */
+.gradient-text {
+    background: var(--auth-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    will-change: background;
+}
+
+/* Enhanced button hover effects - optimized */
+.auth-button {
+    position: relative;
+    overflow: hidden;
+    transition: var(--auth-transition);
+    will-change: transform, box-shadow;
+}
+
+.auth-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    will-change: left;
+}
+
+.auth-button:hover::before {
+    left: 100%;
+}
+
+.auth-button:hover {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: var(--auth-shadow);
+}
+
+/* Input field focus effects - optimized */
+.auth-input {
+    transition: var(--auth-transition);
+    position: relative;
+    will-change: transform, box-shadow, border-color;
+}
+
+.auth-input:focus {
+    transform: translate3d(0, -1px, 0);
+    box-shadow: var(--auth-shadow);
+}
+
+/* Card selection effect - optimized */
+.selection-card {
+    transition: var(--auth-transition);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+}
+
+.selection-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(11, 27, 73, 0.05) 0%, rgba(30, 63, 184, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: opacity;
+}
+
+.selection-card:hover::before {
+    opacity: 1;
+}
+
+.selection-card.selected::before {
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(11, 27, 73, 0.1) 0%, rgba(30, 63, 184, 0.1) 100%);
+}
+
+.selection-card:hover {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: var(--auth-shadow);
+}
+
+/* Loading spinner enhancement - optimized */
+.spinner {
+    animation: spin 1s linear infinite;
+    will-change: transform;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Form validation styles - optimized */
+.error-shake {
+    animation: shake 0.5s ease-in-out;
+    will-change: transform;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    25% {
+        transform: translate3d(-5px, 0, 0);
+    }
+
+    75% {
+        transform: translate3d(5px, 0, 0);
+    }
+}
+
+/* Success state animations - optimized */
+.success-bounce {
+    animation: bounce 0.5s ease-in-out;
+    will-change: transform;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    40% {
+        transform: translate3d(0, -10px, 0);
+    }
+
+    60% {
+        transform: translate3d(0, -5px, 0);
+    }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 640px) {
+    .auth-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .auth-button {
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+    }
+
+    /* Reduce animations on mobile for better performance */
+    .floating {
+        animation-duration: 8s;
+    }
+
+    .auth-button:hover {
+        transform: none;
+    }
+
+    .selection-card:hover {
+        transform: none;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .selection-card:active {
+        transform: scale(0.98);
+    }
+
+    .auth-button:active {
+        transform: scale(0.98);
+    }
+
+    /* Disable hover effects on touch devices */
+    .auth-button:hover::before {
+        left: -100%;
+    }
+
+    .selection-card:hover::before {
+        opacity: 0;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .floating {
+        animation: none;
+    }
+
+    .auth-button::before {
+        display: none;
+    }
+
+    .error-shake {
+        animation: none;
+    }
+
+    .success-bounce {
+        animation: none;
+    }
+
+    .spinner {
+        animation: none;
+    }
+
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .auth-card {
+        border: 2px solid var(--auth-primary);
+    }
+
+    .auth-input {
+        border-width: 2px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .auth-card {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .floating {
+        display: none;
+    }
+}
