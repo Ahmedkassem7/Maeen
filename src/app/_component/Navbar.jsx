@@ -42,32 +42,32 @@ export default function Navbar() {
 
   const router = useRouter();
 
-  // التحقق من حالة المعلم
-  useEffect(() => {
-    // console.log("Checking teacher status", user);
+  // // التحقق من حالة المعلم
+  // useEffect(() => {
+  //   // console.log("Checking teacher status", user);
 
-    if (isAuthenticated && user?.userType === "teacher") {
-      // إذا كان المعلم قد تم التحقق منه من قبل الخادم
-      if (user.isVerified) {
-        // إذا كانت الحالة المحلية ليست محدّثة بعد
-        if (!isVerified) {
-          // console.log("Updating local state to verified");
-          // قم بتحديث الحالة باستخدام دالة التحديث من Zustand
-          setAuthStore((prevState) => ({
-            ...prevState,
-            user: { ...prevState.user, isVerified: true },
-            isVerified: true,
-          }));
-        }
-        // توجيه المعلم إلى صفحته
-        router.push("/Teacher");
-      } else {
-        // إذا لم يتم التحقق منه، وجهه لصفحة الانتظار
-        // console.log("Redirecting to waiting approval page", user);
-        router.push("/waiting-approval");
-      }
-    }
-  }, [isAuthenticated, user, isVerified, router, setAuthStore]);
+  //   if (isAuthenticated && user?.userType === "teacher") {
+  //     // إذا كان المعلم قد تم التحقق منه من قبل الخادم
+  //     if (user.isVerified) {
+  //       // إذا كانت الحالة المحلية ليست محدّثة بعد
+  //       if (!isVerified) {
+  //         // console.log("Updating local state to verified");
+  //         // قم بتحديث الحالة باستخدام دالة التحديث من Zustand
+  //         setAuthStore((prevState) => ({
+  //           ...prevState,
+  //           user: { ...prevState.user, isVerified: true },
+  //           isVerified: true,
+  //         }));
+  //       }
+  //       // توجيه المعلم إلى صفحته
+  //       router.push("/Teacher");
+  //     } else {
+  //       // إذا لم يتم التحقق منه، وجهه لصفحة الانتظار
+  //       // console.log("Redirecting to waiting approval page", user);
+  //       router.push("/waiting-approval");
+  //     }
+  //   }
+  // }, [isAuthenticated, user, isVerified, router, setAuthStore]);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -84,6 +84,19 @@ export default function Navbar() {
   // const { token } = useAuthStore();
 
   // Fetch unread count on mount and when authenticated
+
+  useEffect(() => {
+    if (isAuthenticated && user?.userType === "teacher") {
+      if (user.isVerified && !isVerified) {
+        setAuthStore((prevState) => ({
+          ...prevState,
+          user: { ...prevState.user, isVerified: true },
+          isVerified: true,
+        }));
+      }
+      // لا تفعل أي router.push هنا!
+    }
+  }, [isAuthenticated, user, isVerified, setAuthStore]);
   useEffect(() => {
     if (!isAuthenticated || !user) return;
     fetchConversations().then((data) => {
