@@ -302,14 +302,14 @@ export default function EpisodeCard({ episode, onEdit, onDelete, onStart }) {
                 تعديل
               </Button>
 
-              <Button
+              {/* <Button
                 variant="outline"
                 onClick={() => onDelete(episode)}
                 className="hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300"
               >
                 <Trash2 className="h-4 w-4 ml-2" />
                 حذف
-              </Button>
+              </Button> */}
 
               <Button
                 variant="outline"
