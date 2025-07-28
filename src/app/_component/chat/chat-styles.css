@@ -1,0 +1,323 @@
+/* Modern Chat Styles - Optimized */
+
+/* Performance optimizations */
+.chat-container {
+    contain: layout style paint;
+    will-change: scroll-position;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+}
+
+.message-bubble {
+    contain: layout style;
+    transform: translateZ(0);
+    /* Force hardware acceleration */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Prevent horizontal overflow */
+.chat-messages-container {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.chat-message-content {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+}
+
+/* Optimized Scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #1e3a8a rgba(243, 244, 246, 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(243, 244, 246, 0.3);
+    border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #0b1b49, #1e3a8a);
+    border-radius: 8px;
+    border: 1px solid rgba(243, 244, 246, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #1e3a8a, #0b1b49);
+    box-shadow: 0 2px 4px rgba(11, 27, 73, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+    background: rgba(243, 244, 246, 0.3);
+}
+
+/* Performance optimized animations */
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.message-enter {
+    animation: messageSlideIn 0.2s ease-out;
+    will-change: transform, opacity;
+}
+
+/* Compact typing animation */
+@keyframes typing {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-6px);
+    }
+}
+
+.typing-indicator {
+    animation: typing 1.2s infinite;
+    will-change: transform;
+}
+
+.typing-indicator:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-indicator:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* Optimized pulse effect */
+@keyframes onlinePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+.online-pulse {
+    animation: onlinePulse 1.8s infinite;
+    will-change: box-shadow;
+}
+
+/* Compact shimmer effect */
+@keyframes shimmer {
+    0% {
+        background-position: -100px 0;
+    }
+
+    100% {
+        background-position: calc(100px + 100%) 0;
+    }
+}
+
+/* Responsive design optimizations */
+@media (max-width: 768px) {
+    .chat-container {
+        font-size: 14px;
+    }
+
+    .message-bubble {
+        max-width: 85%;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .message-enter,
+    .typing-indicator,
+    .online-pulse {
+        animation: none;
+    }
+
+    .message-bubble {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Focus optimizations for keyboard navigation */
+.chat-input:focus-visible {
+    outline: 2px solid #0b1b49;
+    outline-offset: 2px;
+}
+
+.conversation-item:focus-visible {
+    outline: 2px solid #0b1b49;
+    outline-offset: -2px;
+}
+
+/* Memory and performance optimizations */
+.chat-background {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.chat-message-list {
+    transform: translateZ(0);
+    overflow-anchor: auto;
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    background-size: 200px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient text animation */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-text {
+    background: linear-gradient(-45deg, #0b1b49, #1e3a8a, #3b82f6, #0b1b49);
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Backdrop blur fallback */
+.backdrop-blur-fallback {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    .backdrop-blur-fallback {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+/* Focus ring styles */
+.focus-ring:focus-visible {
+    outline: 2px solid #0b1b49;
+    outline-offset: 2px;
+}
+
+/* Message selection */
+.message-selectable {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+    .chat-container {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .chat-container {
+        font-size: 16px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(17, 24, 39, 0.5);
+    }
+
+    .backdrop-blur-fallback {
+        background-color: rgba(17, 24, 39, 0.8);
+    }
+}
+
+/* Print styles */
+@media print {
+    .chat-container {
+        background: white !important;
+        color: black !important;
+    }
+
+    .message-bubble {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #000;
+    }
+
+    .message-bubble {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion */
+/* @media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+} */
