@@ -332,7 +332,7 @@ const EpisodeCard = ({ episode }) => {
             <div className="text-center sm:text-left">
               <div className="flex items-baseline justify-center sm:justify-start gap-1">
                 <span className="text-xl sm:text-2xl font-bold text-islamic-blue">
-                  {episode.totalPrice}
+                  {episode?.totalPrice || episode?.price}
                 </span>
                 <span className="text-sm text-gray-500">
                   {episode.currency}
