@@ -324,7 +324,7 @@ export default function Home() {
           </motion.div>
 
           {/* Additional feature highlight */}
-          <motion.div
+          {/* <motion.div
             className="bg-gradient-to-r from-islamic-blue/10 via-blue-50 to-islamic-green/10 rounded-3xl p-8 md:p-12"
             variants={fadeInUp}
           >
@@ -346,10 +346,7 @@ export default function Home() {
                     <div className="w-3 h-3 bg-islamic-blue rounded-full"></div>
                     <span className="text-slate-700">تسجيلات عالية الجودة</span>
                   </div>
-                  {/* <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-islamic-gold rounded-full"></div>
-                    <span className="text-slate-700">تطبيق محمول متطور</span>
-                  </div> */}
+
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
                     <span className="text-slate-700">نظام تتبع التقدم</span>
@@ -369,7 +366,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </motion.div>
 
