@@ -330,10 +330,10 @@ export default function TeacherListing() {
 
           {/* Results and Pagination Info */}
           {pagination && (
-            <div className="mb-4 text-sm text-gray-600 font-arabic">
-              عرض {pagination.count} من أصل {pagination.totalItems} معلم
-              {filters.q && ` - البحث عن: "${filters.q}"`}
-            </div>
+            // <div className="mb-4 text-sm text-gray-600 font-arabic">
+            //   عرض {pagination.count} من أصل {pagination.totalItems} معلم
+            //   {filters.q && ` - البحث عن: "${filters.q}"`}
+            // </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
