@@ -351,6 +351,16 @@ const useAuthStore = create(
           return false;
         }
       },
+
+      // New: Update user data
+      updateUser: (userData) => {
+        set((state) => ({
+          user: {
+            ...state.user,
+            ...userData,
+          },
+        }));
+      },
     }),
     {
       name: "auth-storage",
