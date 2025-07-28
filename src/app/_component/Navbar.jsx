@@ -379,7 +379,7 @@ export default function Navbar() {
                                   <div className="text-gray-700 text-sm mt-1">
                                     {notif.message}
                                   </div>
-                                  {notif.link && (
+                                  {/* {notif.link && (
                                     <button
                                       className="text-xs cursor-pointer text-blue-600 hover:underline mt-1 inline-block font-bold"
                                       onClick={(e) => {
@@ -389,7 +389,7 @@ export default function Navbar() {
                                     >
                                       عرض التفاصيل
                                     </button>
-                                  )}
+                                  )} */}
                                 </div>
                                 <button
                                   className="ml-2 cursor-pointer text-red-500 hover:text-red-700 p-1 rounded-full transition-colors hover:shadow-lg hover:bg-rose-100 duration-300"
@@ -702,7 +702,7 @@ export default function Navbar() {
                                 <div className="text-gray-700 text-sm mt-1">
                                   {notif.message}
                                 </div>
-                                {notif.link && (
+                                {/* {notif.link && (
                                   <button
                                     className="text-xs cursor-pointer text-blue-600 hover:underline mt-1 inline-block font-bold"
                                     onClick={(e) => {
@@ -713,7 +713,7 @@ export default function Navbar() {
                                   >
                                     عرض التفاصيل
                                   </button>
-                                )}
+                                )} */}
                               </div>
                               <button
                                 className="ml-2 text-red-500 cursor-pointer hover:text-red-700 p-1 rounded-full transition-colors"
