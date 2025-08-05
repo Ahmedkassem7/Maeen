@@ -9,6 +9,8 @@ import EpisodeCard from "./components/EpisodeCard";
 import useEpisodesStore from "../../stores/EpisodesStore";
 import { useDebounceCallback } from "../hooks/useDebounceCallback";
 import { formatCurriculum } from "../lib/utils";
+import { clearCache } from "../Api/halaka";
+import { clearStoreCache } from "../../stores/EpisodesStore";
 
 const FilterSidebar = dynamic(() => import("./components/FilterSidebar"), {
   loading: () => <div className="bg-white rounded-lg p-4 animate-pulse h-40" />,
@@ -38,7 +40,7 @@ const EpisodesPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     curriculum: "all",
-    priceRange: [0, 1000],
+    priceRange: [0, 50000], // زيادة الحد الأقصى للسعر
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -53,7 +55,6 @@ const EpisodesPage = () => {
   // Debounced search function
   const debouncedSearch = useDebounceCallback((searchValue) => {
     // يمكن إضافة منطق البحث هنا إذا كان مطلوباً
-    console.log("Searching for:", searchValue);
   }, 500);
 
   useEffect(() => {
@@ -80,10 +81,25 @@ const EpisodesPage = () => {
   );
 
   // Memoized filter change handler
-  const handleFiltersChange = useCallback((newFilters) => {
-    setFilters(newFilters);
-    // لا نحتاج لـ fetchPublicEpisodes هنا لأن الفلاتر ستتعامل معه مباشرة
-  }, []);
+  const handleFiltersChange = useCallback(
+    async (newFilters) => {
+      // مسح الكاش عند تغيير الفلاتر لضمان عدم عرض بيانات قديمة
+      clearCache();
+      clearStoreCache();
+
+      setFilters(newFilters);
+      // نحتاج لإعادة تحميل البيانات عند تغيير الفلاتر
+      const result = await fetchPublicEpisodes(newFilters, 1, limit, false);
+      if (result && result.pagination) {
+        setTotalPages(result.pagination.totalPages || 1);
+        setTotalItems(result.pagination.totalItems || 0);
+        setHasNext(result.pagination.hasNext || false);
+        setHasPrev(result.pagination.hasPrev || false);
+      }
+      setPage(1); // إعادة تعيين الصفحة للأولى
+    },
+    [fetchPublicEpisodes, limit]
+  );
 
   // Memoized page change handler
   const handlePageChange = useCallback(
@@ -131,18 +147,11 @@ const EpisodesPage = () => {
           }
         }
 
-        // Curriculum filter
+        // Price range filter - only apply if user has changed from default
         if (
-          filters.curriculum !== "all" &&
-          episode.curriculum !== filters.curriculum
-        ) {
-          return false;
-        }
-
-        // Price range filter - use totalPrice instead of price
-        if (
-          episode.totalPrice < filters.priceRange[0] ||
-          episode.totalPrice > filters.priceRange[1]
+          (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 50000) &&
+          (episode.totalPrice < filters.priceRange[0] ||
+            episode.totalPrice > filters.priceRange[1])
         ) {
           return false;
         }
@@ -163,7 +172,7 @@ const EpisodesPage = () => {
     return {
       hasCurriculum: filters.curriculum !== "all",
       hasPriceRange:
-        filters.priceRange[0] !== 0 || filters.priceRange[1] !== 1000,
+        filters.priceRange[0] !== 0 || filters.priceRange[1] !== 50000,
     };
   }, [filters]);
 
@@ -180,11 +189,13 @@ const EpisodesPage = () => {
           newFilters.curriculum = "all";
           break;
         case "priceRange":
-          newFilters.priceRange = [0, 1000];
+          newFilters.priceRange = [0, 50000];
           break;
       }
       setFilters(newFilters);
       // إعادة تحميل البيانات مع الفلاتر الجديدة
+      clearCache(); // مسح الكاش
+      clearStoreCache(); // مسح كاش الـ store
       fetchPublicEpisodes(newFilters, 1, limit, false);
     },
     [filters, fetchPublicEpisodes, limit]
@@ -351,7 +362,7 @@ const EpisodesPage = () => {
                       </span>
                     )}
                     {(filters.priceRange[0] !== 0 ||
-                      filters.priceRange[1] !== 1000) && (
+                      filters.priceRange[1] !== 50000) && (
                       <span
                         onClick={() => removeFilter("priceRange")}
                         className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-yellow-200 transition-colors flex items-center gap-1"

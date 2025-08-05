@@ -1,7 +1,6 @@
 "use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_component/Navbar";
 import Footer from "./_component/Footer";
 import { RouteGuard } from "../components/ProtectedRoute";
 import { usePathname } from "next/navigation";
@@ -11,6 +10,7 @@ import Loading from "@/app/_component/shared/loading/Loading";
 import ErrorBoundary from "./_component/shared/ErrorBoundary";
 import OfflineIndicator from "./_component/shared/OfflineIndicator";
 import { useToast } from "./hooks/useToast";
+import Navbar from "./_component/Navbar";
 
 function ToastPortal() {
   const { toasts, dismiss } = useToast();

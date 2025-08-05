@@ -245,6 +245,7 @@ export const getPublicHalakas = async (filters = {}, page = 1, limit = 10) => {
     }
 
     const queryParams = new URLSearchParams();
+    // إرسال curriculum filter للباك إند مباشرة حسب الـ documentation
     if (filters.curriculum && filters.curriculum !== "all") {
       queryParams.append("curriculum", filters.curriculum);
     }

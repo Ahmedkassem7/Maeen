@@ -58,6 +58,9 @@ const clearStoreCache = () => {
   storeCache.clear();
 };
 
+// Export clearStoreCache for external use
+export { clearStoreCache };
+
 // Auto-clear cache every 10 minutes
 setInterval(clearStoreCache, 10 * 60 * 1000);
 
@@ -580,7 +583,6 @@ const useEpisodesStore = create((set, get) => ({
 
     // Prevent concurrent requests
     if (isRequestInProgress) {
-      console.log("Request already in progress, skipping...");
       return;
     }
 
@@ -607,7 +609,6 @@ const useEpisodesStore = create((set, get) => ({
       const response = await getPublicHalakas(filters, page, limit);
       const episodesData = response?.data || response || [];
       const paginationData = response?.pagination || null;
-      console.log("Fetched public episodes:", episodesData);
 
       const episodes = episodesData.map((episode) => ({
         id: episode.id,
@@ -620,7 +621,7 @@ const useEpisodesStore = create((set, get) => ({
         price: episode.price || 0,
         totalPrice: episode.totalPrice || 0,
         currency: episode.currency || "ج.م",
-        curriculum: episode.curriculum || "quran_memorization",
+        curriculum: episode.curriculum,
         halqaType: episode.halqaType || "halqa",
         location: episode.location || "أونلاين",
         nextSession: episode.nextSession || "غير محدد",

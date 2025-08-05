@@ -64,9 +64,9 @@ const FilterSidebar = ({
   const clearAllFilters = () => {
     const resetFilters = {
       curriculum: "all",
-      priceRange: [0, 1000],
+      priceRange: [0, 50000],
     };
-    setPriceRange([0, 1000]);
+    setPriceRange([0, 50000]);
     onFiltersChange(resetFilters);
     debouncedFetchEpisodes(resetFilters, 1, 10, false);
   };
@@ -140,54 +140,13 @@ const FilterSidebar = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>{priceRange[0]} ج.م</span>
-              <span>{priceRange[1]} ج.م</span>
-            </div>
-
-            {/* Custom Range Slider */}
-            <div className="relative">
-              <div className="flex gap-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  step="50"
-                  value={priceRange[0]}
-                  onChange={(e) => {
-                    const newMin = parseInt(e.target.value);
-                    if (newMin <= priceRange[1]) {
-                      handlePriceRangeChange([newMin, priceRange[1]]);
-                    }
-                  }}
-                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none slider"
-                />
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  step="50"
-                  value={priceRange[1]}
-                  onChange={(e) => {
-                    const newMax = parseInt(e.target.value);
-                    if (newMax >= priceRange[0]) {
-                      handlePriceRangeChange([priceRange[0], newMax]);
-                    }
-                  }}
-                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none slider"
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Quick Price Options */}
           <div className="grid grid-cols-2 gap-2">
             {[
-              [0, 200],
-              [200, 400],
-              [400, 600],
-              [600, 1000],
+              [0, 1000],
+              [1000, 3000],
+              [3000, 10000],
+              [10000, 50000],
             ].map(([min, max]) => (
               <Button
                 key={`${min}-${max}`}
@@ -200,10 +159,31 @@ const FilterSidebar = ({
                     : "border-gray-300 text-gray-600 hover:border-islamic-blue"
                 }`}
               >
-                {min}-{max} ج.م
+                {min === 0 ? "مجانية" : `${min}`} - {max === 50000 ? "+" : max}{" "}
+                ج.م
               </Button>
             ))}
           </div>
+
+          {/* Show current price range if not default */}
+          {(priceRange[0] !== 0 || priceRange[1] !== 50000) && (
+            <div className="space-y-2">
+              <div className="text-center p-2 bg-islamic-blue/10 rounded-lg">
+                <span className="text-sm text-islamic-blue font-medium">
+                  النطاق المحدد: {priceRange[0]} -{" "}
+                  {priceRange[1] === 50000 ? "∞" : priceRange[1]} ج.م
+                </span>
+              </div>
+              <Button
+                onClick={() => handlePriceRangeChange([0, 50000])}
+                variant="outline"
+                size="sm"
+                className="w-full text-xs border-red-300 text-red-600 hover:bg-red-50"
+              >
+                إزالة فلتر السعر
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

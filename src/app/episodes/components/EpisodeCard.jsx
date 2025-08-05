@@ -108,7 +108,6 @@ const DetailRow = ({ icon: Icon, text }) => (
 );
 
 const EpisodeCard = ({ episode }) => {
-  console.log("🔥 EpisodeCard called", { episode });
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
@@ -129,7 +128,7 @@ const EpisodeCard = ({ episode }) => {
     (episode.currentStudents / episode.maxStudents) * 100;
 
   const curriculumLabel =
-    curriculumLabels[episode.curriculum] || episode.curriculum;
+    curriculumLabels[episode.curriculum] || episode.curriculum || "غير محدد";
   const curriculumColor =
     curriculumColors[episode.curriculum] ||
     "bg-gray-100 text-gray-800 border-gray-200";
@@ -186,11 +185,7 @@ const EpisodeCard = ({ episode }) => {
   //   clearEnrollmentError();
   // };
   const handleBookNow = () => {
-    console.log("🔥 handleBookNow called", { user, token, isFullyBooked });
-    console.log("🔥 Button clicked!");
-
     if (!user || !token) {
-      console.log("🔥 No user or token, showing toast");
       setToastState({
         show: true,
         message: commonErrorMessages.auth.required,
@@ -201,12 +196,10 @@ const EpisodeCard = ({ episode }) => {
       return;
     }
 
-    console.log("🔥 Setting showConfirmationModal to true");
     setShowConfirmationModal(true);
   };
 
   const handleCloseModal = () => {
-    console.log("handleCloseModal called");
     setShowConfirmationModal(false);
   };
 
