@@ -66,17 +66,26 @@ export default function MainContentTabs() {
     await deleteEpisode(episodeId, token);
   };
 
-  // Handle start session
+  // Enhanced start session handler
   const handleStartSession = (episode) => {
-    const { meetingId, password } = episode.zoomMeeting || {};
+    console.log("Starting session for episode:", episode);
 
     // Check if episode has zoom meeting data
-    if (meetingId) {
+    const zoomMeeting = episode.zoomMeeting;
+    console.log("Zoom meeting data:", zoomMeeting);
+
+    if (zoomMeeting && (zoomMeeting.meetingId || zoomMeeting.meetingNumber)) {
+      const meetingId = zoomMeeting.meetingId || zoomMeeting.meetingNumber;
+      const password =
+        zoomMeeting.password || zoomMeeting.meetingPassword || "";
+
+      console.log("Found zoom meeting:", { meetingId, password });
+
       // Create URL with query parameters for the meeting page
       const meetingParams = new URLSearchParams({
         episodeName: episode.title || episode.name || "حلقة قرآنية",
-        meetingNumber: meetingId,
-        meetingPassword: password || "",
+        meetingNumber: meetingId.toString(),
+        meetingPassword: password,
         userName: user ? user.firstName + " " + user.lastName : "Teacher",
         userRole: user?.role === "teacher" ? "1" : "0", // 1 for teacher (host), 0 for student
       });
@@ -89,9 +98,11 @@ export default function MainContentTabs() {
           meetingParams.toString()
       );
     } else {
-      // Handle regular session start (non-Zoom)
-      console.log("Starting regular session for:", episode);
-      // You can implement regular session logic here
+      // Handle regular session start (non-Zoom) or show error
+      console.log("No zoom meeting data found for episode:", episode);
+      alert(
+        "لا يوجد معرف اجتماع Zoom لهذه الحلقة. يرجى إضافة معرف الاجتماع أولاً."
+      );
     }
   };
 

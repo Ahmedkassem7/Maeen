@@ -37,6 +37,9 @@ import useEpisodesStore from "@/stores/EpisodesStore";
 import EditHalaqaModal from "@/app/_component/EditHalaqa/EditHalaqaModal";
 
 export default function EpisodeCard({ episode, onEdit, onDelete, onStart }) {
+  const { user, token } = useAuthStore();
+  console.log("EpisodeCard user:", user);
+
   const router = useRouter();
   const [showNoGroupModal, setShowNoGroupModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -60,6 +63,47 @@ export default function EpisodeCard({ episode, onEdit, onDelete, onStart }) {
 
   const handleEditClose = () => {
     setShowEditModal(false);
+  };
+
+  // Enhanced start session handler with better zoom meeting validation
+  const handleStartSession = (episode) => {
+    console.log("Starting session for episode:", episode);
+
+    // Check if episode has zoom meeting data
+    const zoomMeeting = episode.zoomMeeting;
+    console.log("Zoom meeting data:", zoomMeeting);
+
+    if (zoomMeeting && (zoomMeeting.meetingId || zoomMeeting.meetingNumber)) {
+      const meetingId = zoomMeeting.meetingId || zoomMeeting.meetingNumber;
+      const password =
+        zoomMeeting.password || zoomMeeting.meetingPassword || "";
+
+      console.log("Found zoom meeting:", { meetingId, password });
+
+      // Create URL with query parameters for the meeting page
+      const meetingParams = new URLSearchParams({
+        episodeName: episode.title || episode.name || "حلقة قرآنية",
+        meetingNumber: meetingId.toString(),
+        meetingPassword: password,
+        userName: `${user?.firstName} ${user?.lastName}`, // This should be updated with actual user data
+        userRole: "1", // 1 for teacher (host), 0 for student
+      });
+
+      // Redirect to the meeting page
+      router.push(
+        "/meeting/" +
+          (episode._id || episode.id) +
+          "?" +
+          meetingParams.toString()
+      );
+    } else {
+      // Show modal for no zoom meeting
+      setModalMsg(
+        "لا يوجد معرف اجتماع Zoom لهذه الحلقة. يرجى إضافة معرف الاجتماع أولاً."
+      );
+      setShowNoGroupModal(true);
+      console.log("No zoom meeting data found for episode:", episode);
+    }
   };
 
   const getStatusIcon = (status) => {
@@ -268,10 +312,12 @@ export default function EpisodeCard({ episode, onEdit, onDelete, onStart }) {
             {/* Action buttons */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
               <Button
-                onClick={() => onStart(episode)}
+                onClick={() => handleStartSession(episode)}
                 className="bg-gradient-to-r from-islamic-blue to-blue-600 text-white hover:shadow-lg transition-all duration-300 flex-1 min-w-[120px]"
               >
-                {episode.zoomMeeting ? (
+                {episode.zoomMeeting &&
+                (episode.zoomMeeting.meetingId ||
+                  episode.zoomMeeting.meetingNumber) ? (
                   <>
                     <Video className="h-4 w-4 ml-2" />
                     بدء الزووم

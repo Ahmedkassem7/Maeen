@@ -35,7 +35,7 @@ import {
 export default function Navbar() {
   const { isAuthenticated, user, isVerified } = useAuthStore();
   const setAuthStore = useAuthStore.setState;
-  const { isStudent } = usePermissions();
+  const { isStudent, isTeacher } = usePermissions();
   const { performLogout } = useEnhancedLogout();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -205,27 +205,6 @@ export default function Navbar() {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
-  }, []);
-
-  // Fix the outside click useEffect:
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Check if click is inside any dropdown
-      if (
-        (dropdownRef.current && dropdownRef.current.contains(event.target)) ||
-        (notifDropdownRefDesktop.current &&
-          notifDropdownRefDesktop.current.contains(event.target)) ||
-        (notifDropdownRefMobile.current &&
-          notifDropdownRefMobile.current.contains(event.target))
-      ) {
-        return;
-      }
-      // Close all dropdowns if click is outside
-      setNotifDropdownOpen(false);
-      setIsDropdownOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (

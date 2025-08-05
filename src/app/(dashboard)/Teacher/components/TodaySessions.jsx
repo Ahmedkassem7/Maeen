@@ -22,15 +22,24 @@ export default function TodaySessions({ todaySessions = [] }) {
     fetchHalakatToday(token);
   }, [token]);
   const handleStartSession = (session) => {
-    console.log("Starting session for:", session.zoomMeeting);
-    const { meetingId, password } = session.zoomMeeting || {};
+    console.log("Starting session for:", session);
 
-    if (meetingId) {
+    // Check if session has zoom meeting data
+    const zoomMeeting = session.zoomMeeting;
+    console.log("Zoom meeting data:", zoomMeeting);
+
+    if (zoomMeeting && (zoomMeeting.meetingId || zoomMeeting.meetingNumber)) {
+      const meetingId = zoomMeeting.meetingId || zoomMeeting.meetingNumber;
+      const password =
+        zoomMeeting.password || zoomMeeting.meetingPassword || "";
+
+      console.log("Found zoom meeting:", { meetingId, password });
+
       // Create URL with query parameters for the meeting page
       const meetingParams = new URLSearchParams({
         episodeName: session.title || session.name || "حلقة قرآنية",
-        meetingNumber: meetingId,
-        meetingPassword: password || "",
+        meetingNumber: meetingId.toString(),
+        meetingPassword: password,
         userName: user ? user.firstName + " " + user.lastName : "Teacher",
         userRole: user?.role === "teacher" ? "1" : "0", // 1 for teacher (host), 0 for student
       });
@@ -43,9 +52,11 @@ export default function TodaySessions({ todaySessions = [] }) {
           meetingParams.toString()
       );
     } else {
-      // Handle regular session start (non-Zoom)
-      console.log("Starting regular session for:", episode);
-      // You can implement regular session logic here
+      // Handle regular session start (non-Zoom) or show error
+      console.log("No zoom meeting data found for session:", session);
+      alert(
+        "لا يوجد معرف اجتماع Zoom لهذه الحلقة. يرجى إضافة معرف الاجتماع أولاً."
+      );
     }
   };
 
@@ -221,7 +232,9 @@ export default function TodaySessions({ todaySessions = [] }) {
                       onClick={() => handleStartSession(session)}
                       className="bg-gradient-to-r from-[#0b1b49] to-blue-600 text-white hover:shadow-lg transition-all duration-300 flex-1 min-w-[120px]"
                     >
-                      {session.zoomMeeting ? (
+                      {session.zoomMeeting &&
+                      (session.zoomMeeting.meetingId ||
+                        session.zoomMeeting.meetingNumber) ? (
                         <>
                           <Video className="h-4 w-4 ml-2" />
                           بدء الزووم
