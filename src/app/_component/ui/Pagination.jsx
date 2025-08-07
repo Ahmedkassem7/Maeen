@@ -14,6 +14,7 @@ const Pagination = ({
   onLoadMore,
   showLoadMore = false,
   isLoading = false,
+  itemLabel = "عنصر", // Add customizable item label
 }) => {
   // Generate page numbers to show
   const getPageNumbers = () => {
@@ -63,7 +64,7 @@ const Pagination = ({
     <div className="flex flex-col items-center space-y-4 mt-8" dir="rtl">
       {/* Items info */}
       <div className="text-sm text-gray-600 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
-        عرض {startItem} إلى {endItem} من {totalItems} حلقة
+        عرض {startItem} إلى {endItem} من {totalItems} {itemLabel}
       </div>
 
       {showLoadMore ? (

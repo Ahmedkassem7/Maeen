@@ -24,7 +24,7 @@ export const islamicSubjects = [
   {
     id: 4,
     name: "العربية",
-    value: "arabicarabic",
+    value: "arabic",
     description: "تعليم اللغة العربية نحواً وصرفاً وبلاغة",
     icon: "✍️",
   },
@@ -35,20 +35,4 @@ export const genderOptions = [
   { value: "", label: "الكل" },
   { value: "male", label: "معلم" },
   { value: "female", label: "معلمة" },
-];
-
-// Halqa type options
-export const halqaTypeOptions = [
-  { value: "", label: "الكل" },
-  { value: "private", label: "خاص" },
-  { value: "halqa", label: "حلقة" },
-];
-
-// Rating options
-export const ratingOptions = [
-  { value: null, label: "الكل" },
-  { value: 4.5, label: "4.5" },
-  { value: 4.0, label: "4.0" },
-  { value: 3.5, label: "3.5" },
-  { value: 3.0, label: "3.0" },
 ];

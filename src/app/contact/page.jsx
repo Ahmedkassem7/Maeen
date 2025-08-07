@@ -140,10 +140,10 @@ const Contact = () => {
         <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-r from-indigo-200 to-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-pulse delay-1000"></div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Enhanced Contact Information Sidebar */}
+          {/*  Contact Information Sidebar */}
           <div className="lg:col-span-1 space-y-8">
             {/* Contact Info Card */}
-            <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 hover:scale-105">
+            <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 ">
               <CardHeader className="bg-gradient-to-r from-islamic-blue to-blue-700 text-white rounded-t-lg relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-bl-full"></div>
                 <CardTitle className="text-2xl font-bold flex items-center gap-4 relative z-10">
@@ -212,7 +212,7 @@ const Contact = () => {
             </Card>
           </div>
 
-          {/* Enhanced Contact Form */}
+          {/*  Contact Form */}
           <div className="lg:col-span-2">
             <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm hover:shadow-3xl transition-all duration-500">
               <CardHeader className="bg-gradient-to-r from-islamic-blue to-blue-700 text-white rounded-t-lg relative overflow-hidden">
@@ -243,7 +243,7 @@ const Contact = () => {
                         <div className="space-y-3">
                           <Label
                             htmlFor="fullname"
-                            className="text-gray-700 font-bold text-lg"
+                            className="text-gray-700 font-bold text-lg "
                           >
                             الاسم الكامل
                           </Label>
@@ -251,7 +251,7 @@ const Contact = () => {
                             id="fullname"
                             name="fullname"
                             type="text"
-                            className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 ${
+                            className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 mt-2 ${
                               errors.fullname && touched.fullname
                                 ? "border-red-400 focus:ring-red-400/30 focus:border-red-400 bg-red-50"
                                 : "border-gray-200 hover:border-gray-300 bg-white"
@@ -275,7 +275,7 @@ const Contact = () => {
                             id="email"
                             name="email"
                             type="email"
-                            className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 ${
+                            className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 mt-2 ${
                               errors.email && touched.email
                                 ? "border-red-400 focus:ring-red-400/30 focus:border-red-400 bg-red-50"
                                 : "border-gray-200 hover:border-gray-300 bg-white"
@@ -301,7 +301,7 @@ const Contact = () => {
                           id="subject"
                           name="subject"
                           type="text"
-                          className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 ${
+                          className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 mt-2 ${
                             errors.subject && touched.subject
                               ? "border-red-400 focus:ring-red-400/30 focus:border-red-400 bg-red-50"
                               : "border-gray-200 hover:border-gray-300 bg-white"
@@ -327,7 +327,7 @@ const Contact = () => {
                           id="message"
                           name="message"
                           rows={6}
-                          className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 resize-none ${
+                          className={`block w-full px-5 py-4 border-2 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-islamic-blue/30 focus:border-islamic-blue transition-all duration-300 mt-2 resize-none ${
                             errors.message && touched.message
                               ? "border-red-400 focus:ring-red-400/30 focus:border-red-400 bg-red-50"
                               : "border-gray-200 hover:border-gray-300 bg-white"

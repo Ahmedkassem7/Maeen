@@ -1,203 +1,251 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Filter, Users, DollarSign, BookOpen, X } from "lucide-react";
 import {
-  islamicSubjects,
-  genderOptions,
-  halqaTypeOptions,
-  ratingOptions,
-} from "./subjects";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../_component/ui/Card";
+import { Button } from "../_component/ui/Button";
+import { Badge } from "../_component/ui/Badge";
+import { islamicSubjects, genderOptions } from "./subjects";
 import useTeachersStore from "@/stores/FreelanceStore";
-import { useDebounceCallback } from "../hooks/useDebounceCallback";
 
-export default function FiltersSidebar() {
-  const { filters, setFilter, clearFilters, fetchTeachers, isLoading } =
-    useTeachersStore();
+export default function FiltersSidebar({ isMobile = false, onClose }) {
+  const { filters, setFilter, clearFilters, isLoading } = useTeachersStore();
   const [localSpecialization, setLocalSpecialization] = useState("");
   const [maxPrice, setMaxPrice] = useState(filters.maxPrice || 500);
 
-  const debouncedFetchTeachers = useDebounceCallback(fetchTeachers, 300);
-
   const handleSpecializationChange = (value, checked) => {
-    let updated = checked
+    const updated = checked
       ? [...filters.specialization, value]
       : filters.specialization.filter((v) => v !== value);
     setFilter("specialization", updated);
-    debouncedFetchTeachers();
   };
 
   const handleMaxPriceChange = (value) => {
     setMaxPrice(value);
     setFilter("maxPrice", value);
-    debouncedFetchTeachers();
-  };
-  // Handle rating change with real-time filtering
-  const handleRatingChange = (value) => {
-    setFilter("rating", value);
-    debouncedFetchTeachers();
   };
 
-  // Handle gender change with real-time filtering
   const handleGenderChange = (value) => {
     setFilter("gender", value || null);
-    debouncedFetchTeachers();
   };
-  // Reset all filters
+
   const handleResetFilters = () => {
     clearFilters();
     setLocalSpecialization("");
     setMaxPrice(500);
-    setTimeout(() => fetchTeachers(), 100);
   };
 
+  // Price range options for quick selection
+  const priceRangeOptions = [
+    [0, 100],
+    [100, 300],
+    [300, 500],
+    [500, 1000],
+  ];
+
   return (
-    <div
-      className="space-y-6 text-sm text-gray-700 bg-gradient-to-b from-white to-gray-50 p-6 rounded-2xl shadow-lg border border-gray-100"
-      dir="rtl"
-    >
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <label className="font-bold mb-3 text-gray-800 font-arabic flex items-center gap-2">
-          <span className="text-green-500">📚</span>
-          التخصص
-        </label>
-        <input
-          type="text"
-          placeholder="البحث في التخصصات..."
-          value={localSpecialization}
-          onChange={(e) => setLocalSpecialization(e.target.value)}
-          className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none transition-colors font-arabic text-right"
-        />
-        <div className="mt-3 space-y-2">
-          {islamicSubjects
-            .filter(
-              (subject) =>
-                localSpecialization === "" ||
-                subject.name
-                  .toLowerCase()
-                  .includes(localSpecialization.toLowerCase())
-            )
-            .map((subject) => (
-              <label
-                key={subject.id}
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  className="accent-green-500 scale-110"
-                  checked={filters.specialization.includes(subject.value)}
-                  onChange={(e) =>
-                    handleSpecializationChange(subject.value, e.target.checked)
-                  }
-                />
-                {/* <span className="text-lg">{subject.icon}</span> */}
-                <span className="font-arabic text-gray-700">
-                  {subject.name}
-                </span>
-              </label>
-            ))}
-        </div>
-      </div>
+    <div className="space-y-6">
+      {/* Filter Header - Only show on desktop */}
+      {!isMobile && (
+        <Card className="bg-gradient-to-r from-islamic-blue to-blue-700 text-white border-0 shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              تصفية النتائج
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      )}
 
-      {/* السعر الأقصى */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <label className="font-bold mb-3 text-gray-800 font-arabic flex items-center gap-2">
-          <span className="text-yellow-500">💰</span>
-          الحد الأقصى للسعر
-        </label>
-        <div className="space-y-3">
-          <div className="relative">
-            <input
-              type="range"
-              min="0"
-              max="1000"
-              step="100"
-              value={maxPrice}
-              onChange={(e) => handleMaxPriceChange(e.target.value)}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-            />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500 font-arabic">
-            <span>0 ج.م</span>
-            <span className="font-bold text-green-600">{maxPrice} ج.م</span>
-            <span>1000 ج.م</span>
-          </div>
-        </div>
-      </div>
-
-      {/* التقييم */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <label className="font-bold mb-3 text-gray-800 font-arabic flex items-center gap-2">
-          <span className="text-yellow-500">⭐</span>
-          التقييم
-        </label>
-        <div className="space-y-2">
-          {ratingOptions.map((option, i) => (
-            <label
-              key={i}
-              className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-            >
-              <input
-                name="rating"
-                type="radio"
-                className="accent-yellow-500 scale-110"
-                checked={filters.rating === option.value}
-                onChange={() => handleRatingChange(option.value)}
-              />
-              <div className="flex items-center gap-1">
-                <span className="font-arabic text-gray-700">
-                  {option.label}
-                </span>
-                {option.value && (
-                  <div className="flex text-yellow-400">
-                    {[...Array(Math.floor(option.value))].map(
-                      (_, starIndex) => (
-                        <span key={starIndex}>⭐</span>
-                      )
-                    )}
+      {/* Specialization Filter */}
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-islamic-blue" />
+            التخصص العلمي
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="max-h-48 space-y-2">
+            {islamicSubjects
+              .filter(
+                (subject) =>
+                  localSpecialization === "" ||
+                  subject.name
+                    .toLowerCase()
+                    .includes(localSpecialization.toLowerCase())
+              )
+              .map((subject) => (
+                <label
+                  key={subject.id}
+                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                    filters.specialization.includes(subject.value)
+                      ? "bg-islamic-blue text-white shadow-md"
+                      : "bg-gray-50 hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      value={subject.value}
+                      checked={filters.specialization.includes(subject.value)}
+                      onChange={(e) =>
+                        handleSpecializationChange(
+                          subject.value,
+                          e.target.checked
+                        )
+                      }
+                      className="sr-only"
+                    />
+                    <span className="text-sm font-medium">{subject.name}</span>
                   </div>
-                )}
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
+                </label>
+              ))}
+          </div>
+          {filters.specialization.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <Badge
+                variant="outline"
+                className="text-xs border-islamic-blue text-islamic-blue"
+              >
+                تم اختيار {filters.specialization.length} تخصص
+              </Badge>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* الجنس */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <label className="font-bold mb-3 text-gray-800 font-arabic flex items-center gap-2">
-          <span className="text-pink-500">👥</span>
-          الجنس
-        </label>
-        <div className="space-y-2">
+      {/* Price Range Filter */}
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <DollarSign className="h-5 w-5 text-islamic-blue" />
+            الأسعار
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Quick Price Options */}
+          <div className="grid grid-cols-2 gap-2">
+            {priceRangeOptions.map(([min, max]) => (
+              <Button
+                key={`${min}-${max}`}
+                variant="outline"
+                size="sm"
+                onClick={() => handleMaxPriceChange(max)}
+                className={`text-xs ${
+                  maxPrice === max && filters.maxPrice
+                    ? "bg-islamic-blue text-white border-islamic-blue"
+                    : "border-gray-300 text-gray-600 hover:border-islamic-blue"
+                }`}
+              >
+                {min === 0 ? "0" : min} - {max} ج.م
+              </Button>
+            ))}
+          </div>
+
+          {/* Price Slider */}
+          <div className="space-y-3">
+            <div className="relative">
+              <input
+                type="range"
+                min="50"
+                max="1000"
+                step="50"
+                value={maxPrice}
+                onChange={(e) => handleMaxPriceChange(e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              />
+            </div>
+            <div className="flex justify-between items-center text-xs text-gray-500">
+              <span>50 ج.م</span>
+              <span className="font-bold text-islamic-blue bg-blue-50 px-2 py-1 rounded">
+                من 0 - {maxPrice} ج.م
+              </span>
+              <span>1000 ج.م</span>
+            </div>
+          </div>
+
+          {/* Show current price range if not default */}
+          {filters.maxPrice && (
+            <div className="space-y-2">
+              <div className="text-center p-2 bg-islamic-blue/10 rounded-lg">
+                <span className="text-sm text-islamic-blue font-medium">
+                  النطاق المحدد: 0 - {filters.maxPrice} ج.م
+                </span>
+              </div>
+              <Button
+                onClick={() => handleMaxPriceChange(null)}
+                variant="outline"
+                size="sm"
+                className="w-full text-xs border-red-300 text-red-600 hover:bg-red-50"
+              >
+                إزالة فلتر السعر
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Gender Filter */}
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Users className="h-5 w-5 text-islamic-blue" />
+            جنس المعلم
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
           {genderOptions.map((option, i) => (
             <label
               key={i}
-              className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+              className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                filters.gender === option.value ||
+                (filters.gender === null && option.value === "")
+                  ? "bg-islamic-blue text-white shadow-md"
+                  : "bg-gray-50 hover:bg-gray-100 text-gray-700"
+              }`}
             >
-              <input
-                name="gender"
-                type="radio"
-                className="accent-pink-500 scale-110"
-                checked={
-                  filters.gender === option.value ||
-                  (filters.gender === null && option.value === "")
-                }
-                onChange={() => handleGenderChange(option.value)}
-              />
-              <span className="font-arabic text-gray-700">{option.label}</span>
+              <div className="flex items-center gap-3">
+                <input
+                  name="gender"
+                  type="radio"
+                  value={option.value}
+                  checked={
+                    filters.gender === option.value ||
+                    (filters.gender === null && option.value === "")
+                  }
+                  onChange={() => handleGenderChange(option.value)}
+                  className="sr-only"
+                />
+                <span className="text-sm font-medium">{option.label}</span>
+              </div>
             </label>
           ))}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      {/* إعادة تعيين الفلاتر */}
-      <div className="mt-6">
-        <button
-          onClick={handleResetFilters}
-          disabled={isLoading}
-          className="w-full px-4 py-3 border-2 border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-arabic disabled:opacity-50 disabled:cursor-not-allowed"
+      {/* Clear Filters Button */}
+      <Button
+        onClick={handleResetFilters}
+        disabled={isLoading}
+        variant="outline"
+        className="w-full border-2 border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        مسح جميع المرشحات
+      </Button>
+
+      {/* Apply Filters Button for Mobile */}
+      {isMobile && onClose && (
+        <Button
+          onClick={onClose}
+          className="w-full bg-islamic-blue hover:bg-blue-700 text-white font-semibold"
         >
-          إعادة تعيين جميع الفلاتر
-        </button>
-      </div>
+          تطبيق المرشحات
+        </Button>
+      )}
     </div>
   );
 }

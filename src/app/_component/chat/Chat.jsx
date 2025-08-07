@@ -52,13 +52,13 @@ const Chat = memo(
         </div>
 
         {/* Mobile Header */}
-        <div className="md:hidden bg-gradient-to-r from-[#0b1b49] via-[#1e3a8a] to-[#0b1b49] text-white shadow-xl border-b border-white/10">
+        {/* <div className="md:hidden bg-gradient-to-r from-[#0b1b49] via-[#1e3a8a] to-[#0b1b49] text-white shadow-xl border-b border-white/10">
           <div className="px-3 py-3">
             <h1 className="text-base font-bold text-center bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
               {conversationsTitle}
             </h1>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex h-[calc(100%-50px)] md:h-full relative overflow-hidden">
           {/* Conversations List */}

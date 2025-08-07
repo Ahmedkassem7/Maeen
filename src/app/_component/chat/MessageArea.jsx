@@ -21,6 +21,7 @@ import {
   User,
   MessageCircle,
   ArrowRight,
+  ArrowLeft,
   Phone,
   Video,
   MoreVertical,
@@ -70,7 +71,7 @@ const ChatHeader = memo(
         </div>
 
         {/* Back button for mobile */}
-        {showBackButton && (
+        {/* {showBackButton && (
           <div className="md:hidden flex items-center p-4 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/80 to-blue-50/30 backdrop-blur-sm relative z-10">
             <Button
               variant="ghost"
@@ -80,11 +81,8 @@ const ChatHeader = memo(
             >
               <ArrowRight className="h-5 w-5 text-[#0b1b49]" />
             </Button>
-            <span className="mr-3 font-bold text-[#0b1b49] text-lg">
-              الرجوع للمحادثات
-            </span>
           </div>
-        )}
+        )} */}
 
         {/* Main header */}
         <div className="p-3 relative z-10">
@@ -130,14 +128,16 @@ const ChatHeader = memo(
               )}
 
               {/* Additional action buttons */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-[#0b1b49] hover:bg-[#0b1b49]/10 transition-all duration-200"
-                title="المزيد من الخيارات"
-              >
-                <Settings className="h-5 w-5" />
-              </Button>
+              {showBackButton && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onBackToConversations}
+                  className="hover:bg-[#0b1b49]/10 transition-all duration-200"
+                >
+                  <ArrowLeft className="h-5 w-5 text-[#0b1b49]" />
+                </Button>
+              )}
             </div>
           </div>
         </div>

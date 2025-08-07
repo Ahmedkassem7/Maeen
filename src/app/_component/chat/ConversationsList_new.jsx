@@ -207,13 +207,18 @@ const ConversationsList = ({
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                <MessageCircle className="w-4 h-4" />
-              </div>
-              <h2 className="text-lg font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                {title}
-              </h2>
+            <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5 backdrop-blur-sm">
+              {onlineCount > 0 ? (
+                <>
+                  <Wifi className="w-4 h-4 text-green-300" />
+                  <span className="text-green-100">{onlineCount} متصل</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="w-4 h-4 text-gray-300" />
+                  <span className="text-gray-200">لا يوجد متصلين</span>
+                </>
+              )}
             </div>
 
             <div className="flex items-center gap-3">
@@ -235,23 +240,6 @@ const ConversationsList = ({
                 <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white animate-pulse shadow-lg px-3 py-1">
                   {totalUnreadCount > 99 ? "99+" : totalUnreadCount}
                 </Badge>
-              )}
-            </div>
-          </div>
-
-          {/* Connection Status */}
-          <div className="flex items-center gap-2 mb-4 text-sm">
-            <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5 backdrop-blur-sm">
-              {onlineCount > 0 ? (
-                <>
-                  <Wifi className="w-4 h-4 text-green-300" />
-                  <span className="text-green-100">{onlineCount} متصل</span>
-                </>
-              ) : (
-                <>
-                  <WifiOff className="w-4 h-4 text-gray-300" />
-                  <span className="text-gray-200">لا يوجد متصلين</span>
-                </>
               )}
             </div>
           </div>

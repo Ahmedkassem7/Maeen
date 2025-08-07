@@ -244,12 +244,12 @@ const EpisodesPage = () => {
 
             <div className="relative max-w-2xl mx-auto">
               <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
+              <input
                 type="text"
                 placeholder="ابحث عن الحلقات أو المعلمين..."
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="w-full pr-12 pl-4 py-4 text-lg rounded-2xl border-0 shadow-lg focus:shadow-xl transition-all duration-300"
+                className="w-full pr-12 pl-4 py-3 text-lg rounded-2xl border-0 shadow-lg transition-all duration-300 text-white placeholder:text-white"
               />
             </div>
           </div>
