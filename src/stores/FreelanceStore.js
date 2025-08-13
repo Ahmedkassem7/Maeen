@@ -1,4 +1,8 @@
-import { fetchAllTeachers, clearTeachersCache } from "@/app/Api/freelance";
+import {
+  fetchAllTeachers,
+  fetchTeacherDetails,
+  clearTeachersCache,
+} from "@/app/Api/freelance";
 import { create } from "zustand";
 
 // Debounce utility for search only
@@ -168,6 +172,21 @@ const useTeachersStore = create((set, get) => ({
       set({ error: error?.message || "فشل في تحميل المزيد من المعلمين" });
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  // Fetch teacher details (for local use only, not stored in global state)
+  fetchTeacherDetails: async (teacherId) => {
+    if (!teacherId) {
+      throw new Error("معرف المعلم مطلوب");
+    }
+
+    try {
+      const teacherData = await fetchTeacherDetails(teacherId);
+      return teacherData;
+    } catch (error) {
+      console.error("Error in fetchTeacherDetails:", error);
+      throw error;
     }
   },
 

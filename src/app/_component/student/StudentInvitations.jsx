@@ -14,7 +14,7 @@ import { initiatePayment } from "@/app/Api/payment";
 import Pagination from "../ui/Pagination";
 import useAuthStore from "@/stores/AuthStore";
 import Loading from "../shared/loading/Loading";
-import { formatSchedule } from "@/app/lib/utils";
+import { formatSchedule } from "@/utils/utils";
 import useStudentInvitationsStore from "@/stores/StudentInvitationsStore";
 import { io } from "socket.io-client";
 

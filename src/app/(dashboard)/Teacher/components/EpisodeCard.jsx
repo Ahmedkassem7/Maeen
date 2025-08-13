@@ -28,7 +28,7 @@ import {
   formatCurriculum,
   formatPrice,
   formatStudentCount,
-} from "@/app/lib/utils";
+} from "@/utils/utils";
 import { useRouter } from "next/navigation";
 import useStudentHalakatStore from "@/stores/StudentHalakatStore";
 import useAuthStore from "@/stores/AuthStore";

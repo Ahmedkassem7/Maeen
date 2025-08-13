@@ -1,5 +1,5 @@
 import { Button } from "@/app/_component/ui/Button";
-import { formatCurriculum, getStatusConfigAnswer } from "@/app/lib/utils";
+import { formatCurriculum, getStatusConfigAnswer } from "@/utils/utils";
 import { ArrowRight, Users, Clock, BookOpen, Star } from "lucide-react";
 
 export default function EpisodeHeader({ episodes, isLoadings, router }) {

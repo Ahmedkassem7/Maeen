@@ -8,7 +8,7 @@ import {
 } from "../_component/ui/Card";
 import { Button } from "../_component/ui/Button";
 import { Badge } from "../_component/ui/Badge";
-import { islamicSubjects, genderOptions } from "./subjects";
+import { islamicSubjects, genderOptions } from "./utils/subjects";
 import useTeachersStore from "@/stores/FreelanceStore";
 
 export default function FiltersSidebar({ isMobile = false, onClose }) {

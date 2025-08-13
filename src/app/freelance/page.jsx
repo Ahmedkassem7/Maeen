@@ -4,10 +4,12 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { Filter, X, Search, Users, Star } from "lucide-react";
 import dynamic from "next/dynamic";
 import useTeachersStore from "@/stores/FreelanceStore";
-import { getSpecializationDisplayName, getGenderDisplayName } from "./utils";
-
+import {
+  getSpecializationDisplayName,
+  getGenderDisplayName,
+} from "../../utils/utils.jsx";
 // Lazy load components for better performance
-const Cart = dynamic(() => import("./Cart"), {
+const Cart = dynamic(() => import("./TeacherCard.jsx"), {
   loading: () => <TeacherSkeleton />,
 });
 
@@ -327,19 +329,7 @@ export default function TeacherListing() {
                   : teachers.map((teacher) => (
                       <Cart
                         key={teacher._id}
-                        name={`${teacher.user.firstName} ${teacher.user.lastName}`}
-                        subject={
-                          getSpecializationDisplayName(
-                            teacher.specialization[0]
-                          ) || "غير محدد"
-                        }
-                        image={
-                          teacher.user.profilePicture || "/default-profile.jpg"
-                        }
-                        rating={teacher.performance.rating || 0}
-                        reviews={teacher.performance.totalRatings || 0}
-                        price={teacher.sessionPrice}
-                        currency={teacher.currency || "ج.م"}
+                        teacher={teacher}
                         teacherId={teacher._id}
                       />
                     ))}

@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import EpisodeCard from "./components/EpisodeCard";
 import useEpisodesStore from "../../stores/EpisodesStore";
 import { useDebounceCallback } from "../hooks/useDebounceCallback";
-import { formatCurriculum } from "../lib/utils";
+import { formatCurriculum } from "../../utils/utils";
 import { clearCache } from "../Api/halaka";
 import { clearStoreCache } from "../../stores/EpisodesStore";
 
@@ -53,9 +53,7 @@ const EpisodesPage = () => {
     useEpisodesStore();
 
   // Debounced search function
-  const debouncedSearch = useDebounceCallback((searchValue) => {
-    // يمكن إضافة منطق البحث هنا إذا كان مطلوباً
-  }, 500);
+  const debouncedSearch = useDebounceCallback((searchValue) => {}, 500);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,12 +81,10 @@ const EpisodesPage = () => {
   // Memoized filter change handler
   const handleFiltersChange = useCallback(
     async (newFilters) => {
-      // مسح الكاش عند تغيير الفلاتر لضمان عدم عرض بيانات قديمة
       clearCache();
       clearStoreCache();
 
       setFilters(newFilters);
-      // نحتاج لإعادة تحميل البيانات عند تغيير الفلاتر
       const result = await fetchPublicEpisodes(newFilters, 1, limit, false);
       if (result && result.pagination) {
         setTotalPages(result.pagination.totalPages || 1);

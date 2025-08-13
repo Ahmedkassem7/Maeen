@@ -23,7 +23,7 @@ import {
   formatNextSession,
   formatCurriculum,
   formatStudentCount,
-} from "@/app/lib/utils";
+} from "@/utils/utils";
 import { Badge } from "../ui/Badge";
 import { useRouter } from "next/navigation";
 import useStudentHalakatStore from "@/stores/StudentHalakatStore";
